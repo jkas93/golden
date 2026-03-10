@@ -31,7 +31,18 @@ async function bootstrap() {
 
   // Fase 3: Configuración de middleware
   const middlewareStartTime = Date.now();
-  app.enableCors(); // Enable CORS for the frontend
+  // CORS: en producción solo permite el dominio del frontend; en dev acepta localhost
+  const allowedOrigins = [
+    process.env.FRONTEND_URL ?? 'https://golden.simplemarketing.website',
+    'http://localhost:3000',
+    'http://localhost:3001',
+  ].filter(Boolean);
+  app.enableCors({
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
   app.useGlobalFilters(new AllExceptionsFilter());
   const middlewareTime = Date.now() - middlewareStartTime;
   logger.log(`✅ Middleware configurado (CORS + ExceptionFilter) en ${middlewareTime}ms`);
