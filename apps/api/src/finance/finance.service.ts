@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { FirebaseService } from '../firebase/firebase.service';
-import { Purchase } from '@erp/shared';
-
 @Injectable()
 export class FinanceService {
     constructor(private firebaseService: FirebaseService) { }
